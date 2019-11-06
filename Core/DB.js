@@ -36,26 +36,26 @@ app.listen(port, () => console.log(`${port}`));
 
 //get columns
 
-function getColumns(table, databaseName) {
-    coloum_list = [];
+function getColumns(table) {
+    coloum_list = '';
     mysqlConnection.query(
-        "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = " + "\'" + table + "\'" + " and table_schema = " + "\'" + databaseName + "\'", (err, rows, fields) => {
+        "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = " + "\'" + table + "\'" + " and table_schema = " + "\'" + database_Details.databaseName + "\'", (err, rows, fields) => {
             if (err) {
                 console.log(err)
             }
             else {
                 // res.send(rows);
                 for (i = 0; i < rows.length; i++) {
-                    coloum_list.push(rows[i].COLUMN_NAME);
+                    coloum_list += "," + rows[i].COLUMN_NAME;
                 }
+                coloum_list = coloum_list.slice(1);
                 console.log(coloum_list);
-                res.send(coloum_list)
                 return coloum_list;
             }
         });
 }
 
-getColumns("/column", "users", database_Details.databaseName);
+// getColumns("users");
 
 //SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'users' and table_schema = 'Se_sem4_Project';
 
@@ -134,12 +134,12 @@ function deleteAdata(table, link, coloum, field = '') {
 
 //insert
 
-function insertAdata(table, link) {
-
+function insertAdata(table, link, data) {
 
     app.post(link, (req, res) => {
         const { name, code, salary } = req.body;
-        mysqlConnection.query("INSERT INTO `employee` (`name`, `code`, `salary`) VALUES (? , ? , ?);"
+        columns = getColumns(table);
+        mysqlConnection.query("INSERT INTO " + table + " (" + data + ") VALUES (" + data + ")"
             , [name, code, salary], (err, rows, fields) => {
                 if (err) {
                     console.log(err)
@@ -159,7 +159,8 @@ function insertAdata(table, link) {
     });
 
 }
-
+insertAdata('users', '/users', '3, aa, aa, aa, aa, aa, aa, aa')
+//'3', 'aa', 'aa', 'aa', 'aa', 'aa', 'aa', 'aa'
 
 
 //update
