@@ -50,10 +50,11 @@ exports.delete = (id) => {
 this.delete(4);
 
 
-exports.insert = () => {
-    return Db.insert(table).then((results) => {
+exports.insert = (data) => {
+    return Db.insert(table, data).then((results) => {
         console.log(results)
         return results;
     });
 
 };
+// this.insert([4, 'a', 'b', 'a', 'b', 'a', 'b', 'd']);

@@ -40,8 +40,7 @@ async function getColumns(table) {
         coloum_list += "," + result[0][i].COLUMN_NAME;
     }
     coloum_list = coloum_list.slice(1);
-    console.log(coloum_list + " Coloumns");
-    return coloum_list;
+    return { "names": coloum_list, "length": result[0].length };
 
 }
 
@@ -77,47 +76,19 @@ async function deleteAdata(table, param) {
 
 async function insertAdata(table, data) {
 
-    const result = await mysqlConnection.query("delete from " + table + " where " + param.column + "= ?", [param.body]);
+    var data_ = '';
+    var rows = await getColumns(table);
+    for (i = 0; i < rows.length; i++) {
+        data_ += "," + "\'" + data[i] + "\'";
+    }
+    data_ = data_.slice(1);
+    const result = await mysqlConnection.query("INSERT INTO " + table + " ( " + rows.names + " ) VALUES (" + data_ + " )");
     if (result.length < 1) {
-        throw new Error('Error occur when try to get data by filtering ' + param.body);
+        throw new Error('Error occur when try to insert ' + param.body);
     }
     return result[0];
-}
-
-
-function insertAdata(table, data) {
-    coloum_list = '';
-    ques = '';
-    mysqlConnection.query(
-        "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = " + "\'" + table + "\'" + " and table_schema = " + "\'" + database_Details.databaseName + "\'", (err, rows, fields) => {
-            if (err) {
-                // console.log(err)
-                console.log("error");
-            }
-            // else {
-            // res.send(rows);
-            for (i = 0; i < rows.length; i++) {
-                coloum_list += "," + rows[i].COLUMN_NAME;
-                // console.log(coloum_list+"Column Namwes");
-                ques += "," + "\'" + data[i] + "\'";
-            }
-            ques = ques.slice(1);
-            coloum_list = coloum_list.slice(1);
-            console.log(coloum_list + " Coloumns");
-            mysqlConnection.query("INSERT INTO " + table + " ( " + coloum_list + " ) VALUES (" + ques + " )"
-                , (err, rows, fields) => {
-                    if (err) {
-                        console.log(err)
-                    }
-                    else {
-                    }
-                });
-            // }
-        });
-
 
 }
-
 
 async function updateAdata(table, columns, data, params) {
 
