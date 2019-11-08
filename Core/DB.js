@@ -1,30 +1,22 @@
-const mysql = require('mysql');
 const express = require('express');
 const app = express();
 const bodyparser = require('body-parser');
 var database_Details = require('../Config/config.js');
+const mysql = require('mysql2/promise');
 app.use(bodyparser.json());//sure that bodyparse allow jsons.
 
-var mysqlConnection = getdatabaseObject();
+var mysqlConnection = getdatabaseObject(mysql);
 
-function getdatabaseObject() {
+function getdatabaseObject(mysql) {
     if (mysqlConnection == null) {
-        var mysqlConnection = mysql.createConnection(
-            {
-                host: database_Details.host,
-                user: database_Details.databaseUser,
-                password: database_Details.databasePassword,
-                database: database_Details.databaseName,
-                multipleStatements: true
-            }
-        );
-        mysqlConnection.connect((err) => {
-            if (err) {
-                console.log(err, JSON.stringify(err, undefined, 2));
-            }
-            else {
-                console.log("Ok")
-            }
+        var mysqlConnection = mysql.createPool({
+            host: database_Details.host,
+            user: database_Details.databaseUser,
+            password: database_Details.databasePassword,
+            database: database_Details.databaseName,
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
         });
     }
     return mysqlConnection;
@@ -36,69 +28,62 @@ app.listen(port, () => console.log(`${port}`));
 
 //get columns
 
-function getColumns(table) {
-    // console.log("table passed" + table)
-    coloum_list = '';
-    mysqlConnection.query(
-        "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = " + "\'" + table + "\'" + " and table_schema = " + "\'" + database_Details.databaseName + "\'", (err, rows, fields) => {
-            if (err) {
-                console.log(err)
-            }
-            for (i = 0; i < rows.length; i++) {
-                coloum_list += "," + rows[i].COLUMN_NAME;
-            }
-            coloum_list = coloum_list.slice(1);
-            console.log(coloum_list + " Coloumns");
-            return coloum_list;
-            // }
-        });
+async function getColumns(table) {
+
+    var coloum_list = '';
+    const result = await mysqlConnection.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = " + "\'" + table + "\'" + " and table_schema = " + "\'" + database_Details.databaseName + "\'");
+    if (result[0].length < 1) {
+        throw new Error('Error occur when try to get all details');
+    }
+
+    for (i = 0; i < result[0].length; i++) {
+        coloum_list += "," + result[0][i].COLUMN_NAME;
+    }
+    coloum_list = coloum_list.slice(1);
+    console.log(coloum_list + " Coloumns");
     return coloum_list;
-}
-
-function getAllData(table) {
-    mysqlConnection.query("Select * from " + table, (err, rows, fields) => {
-        if (err) {
-            console.log(err)
-        }
-        else {
-            console.log(rows);
-            return rows;
-        }
-    });
-}
-
-// getAllData("users");
-
-function getADataById(table, param, field = '') {
-    mysqlConnection.query("Select * from " + table + " where " + param.column + "= ?", [param.body], (err, rows, fields) => {
-        if (err) {
-            console.log(err)
-        }
-        else {
-            if (field == '') {
-                console.log(rows);
-                return rows;
-            }
-        }
-    });
 
 }
 
-// getADataById('users', { "column": "email", "body": "sasindu.17@cse.mrt.ac.lk" });
 
+async function getAllData(table) {
 
-function deleteAdata(table, param) {
-    mysqlConnection.query("delete from " + table + " where " + param.column + "= ?", [param.body], (err, rows, fields) => {
-        if (err) {
-            console.log(err)
-        }
-        else {
-        }
-    });
+    const result = await mysqlConnection.query("Select * from " + table);
+    if (result[0].length < 1) {
+        throw new Error('Error occur when try to get all details');
+    }
+    return result[0];
 
 }
 
-// deleteAdata("users", { "column": "userId", "body": "7" });
+async function getByColumn(table, param) {
+
+    const result = await mysqlConnection.query("Select * from " + table + " where " + param.column + "= ?", [param.body]);
+    if (result.length < 1) {
+        throw new Error('Error occur when try to get data by filtering ' + param.body);
+    }
+    return result[0];
+}
+
+async function deleteAdata(table, param) {
+
+    const result = await mysqlConnection.query("delete from " + table + " where " + param.column + "= ?", [param.body]);
+    if (result.length < 1) {
+        throw new Error('Error occur when try to get data by filtering ' + param.body);
+    }
+    return result[0];
+}
+
+
+async function insertAdata(table, data) {
+
+    const result = await mysqlConnection.query("delete from " + table + " where " + param.column + "= ?", [param.body]);
+    if (result.length < 1) {
+        throw new Error('Error occur when try to get data by filtering ' + param.body);
+    }
+    return result[0];
+}
+
 
 function insertAdata(table, data) {
     coloum_list = '';
@@ -133,47 +118,29 @@ function insertAdata(table, data) {
 
 }
 
-function updateAdata(table, columns, data, params) {
+
+async function updateAdata(table, columns, data, params) {
 
     query = '';
     for (i = 0; i < columns.length; i++) {
         query += " , " + columns[i] + " = " + "\"" + data[i] + "\"" + "";
     }
     query = query.slice(3);
-    mysqlConnection.query("UPDATE " + table + " SET " + query + " WHERE " + params.column + " = ?;"
-        , [params.value], (err, rows, fields) => {
-            if (err) {
-                console.log(err)
-            }
-            else {
-                mysqlConnection.query("Select * from " + table, (err, rows, fields) => {
-                    if (err) {
-                        console.log(err)
-                    }
-                    else {
-                        console.log(rows)
-                        return rows;
-                        // print rows
-                    }
-                });
-            }
-        });
+
+    const result = await mysqlConnection.query("UPDATE " + table + " SET " + query + " WHERE " + params.column + " = ?;", [params.body]);
+    if (result.length < 1) {
+        throw new Error('Error occur when try to get data by filtering ' + param.body);
+    }
+    return result[0];
 }
+
+
 
 module.exports.insert = insertAdata;
 module.exports.getAll = getAllData;
-module.exports.get = getADataById;
+module.exports.getByColumn = getByColumn;
 module.exports.delete = deleteAdata;
 module.exports.update = updateAdata;
-
-
-
-// updateAdata("labreports", ["content"], ["This is your report"], { "column": "id", "value": 1 });
-// insertAdata('users', [7, 'aa', 'aa', 'aa', 'aa', 'aa', 'aa', 'aa']);
-
-
-
-
 
 
 
