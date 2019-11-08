@@ -30,14 +30,14 @@ exports.getByEmail = (email) => {
 };
 // this.getByEmail('sasindu.17@cse.mrt.ac.lk');
 
-exports.update = (columns, data, filter) => {
-    return Db.update(table, columns, data, { "column": ID, "body": filter }).then((results) => {
+exports.update = (data, filter) => {
+    return Db.update(table, data, { "column": ID, "body": filter }).then((results) => {
         console.log(results)
         return results;
     });
 
 };
-// this.update(['email', 'password'], ['sasindu.17@cse.mrt.ac.lk', 1111], 1);
+// this.update({ 'email': 'sasindu.17@cse.mrt.ac.lk', 'password': 1111, }, 4);
 
 
 exports.delete = (id) => {
@@ -47,7 +47,7 @@ exports.delete = (id) => {
     });
 
 };
-this.delete(4);
+// this.delete(4);
 
 
 exports.insert = (data) => {

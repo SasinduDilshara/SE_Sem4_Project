@@ -75,14 +75,14 @@ async function deleteAdata(table, param) {
 
 
 async function insertAdata(table, data) {
-
-    var data_ = '';
+    var data__ = '';
+    var data_ = Object.values(data);
     var rows = await getColumns(table);
     for (i = 0; i < rows.length; i++) {
-        data_ += "," + "\'" + data[i] + "\'";
+        data__ += "," + "\'" + data_[i] + "\'";
     }
-    data_ = data_.slice(1);
-    const result = await mysqlConnection.query("INSERT INTO " + table + " ( " + rows.names + " ) VALUES (" + data_ + " )");
+    data__ = data__.slice(1);
+    const result = await mysqlConnection.query("INSERT INTO " + table + " ( " + rows.names + " ) VALUES (" + data__ + " )");
     if (result.length < 1) {
         throw new Error('Error occur when try to insert ' + param.body);
     }
@@ -90,9 +90,11 @@ async function insertAdata(table, data) {
 
 }
 
-async function updateAdata(table, columns, data, params) {
+async function updateAdata(table, data, params) {
 
     query = '';
+    columns = Object.keys(data),
+        data = Object.values(data);
     for (i = 0; i < columns.length; i++) {
         query += " , " + columns[i] + " = " + "\"" + data[i] + "\"" + "";
     }

@@ -49,4 +49,4 @@ exports.insert = (data) => {
     });
 
 };
-// this.insert([3, 202910]);
+// this.insert({ "userId": 3, "labNumber": 202910 });
