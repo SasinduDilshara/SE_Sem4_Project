@@ -1,8 +1,8 @@
-BackupModel = require("./patientsModel.js");
+BackupModel = require("./backupReportsModel.js");
 
 
 exports.getById = (req, res) => {
-    BackupModel.getById(req.params.userId)
+    BackupModel.getById(req.params.id)
         .then((result) => {
             res.status(200).send(result);
         });
@@ -16,7 +16,7 @@ exports.getAll = (req, res) => {
 };
 
 exports.update = (req, res) => {
-    BackupModel.update(req.body, req.params.userId)
+    BackupModel.update(req.body, req.params.id)
         .then((result) => {
             res.status(200).send(result);
         });
@@ -24,7 +24,7 @@ exports.update = (req, res) => {
 
 
 exports.delete = (req, res) => {
-    BackupModel.delete(req.params.userId)
+    BackupModel.delete(req.params.id)
         .then((result) => {
             res.status(200).send(result);
         });

@@ -24,6 +24,7 @@ exports.getByEmail = (req, res) => {
 
 
 exports.update = (req, res) => {
+    console.log(req.params);
     UserModel.update(req.body, req.params.userId)
         .then((result) => {
             res.status(200).send(result);

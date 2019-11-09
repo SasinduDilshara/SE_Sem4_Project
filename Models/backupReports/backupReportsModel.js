@@ -22,8 +22,8 @@ exports.getById = (id) => {
 // this.getById(3);
 
 
-exports.update = (columns, data, filter) => {
-    return Db.update(table, columns, data, { "column": ID, "body": filter }).then((results) => {
+exports.update = (data, filter) => {
+    return Db.update(table, data, { "column": ID, "body": filter }).then((results) => {
         console.log(results)
         return results;
     });

@@ -1,8 +1,8 @@
-NotificationModel = require("./patientsModel.js");
+NotificationModel = require("./notificationsModel.js");
 
 
 exports.getById = (req, res) => {
-    NotificationModel.getById(req.params.userId)
+    NotificationModel.getById(req.params.id)
         .then((result) => {
             res.status(200).send(result);
         });
@@ -16,7 +16,7 @@ exports.getAll = (req, res) => {
 };
 
 exports.update = (req, res) => {
-    NotificationModel.update(req.body, req.params.userId)
+    NotificationModel.update(req.body, req.params.id)
         .then((result) => {
             res.status(200).send(result);
         });
@@ -24,7 +24,7 @@ exports.update = (req, res) => {
 
 
 exports.delete = (req, res) => {
-    NotificationModel.delete(req.params.userId)
+    NotificationModel.delete(req.params.id)
         .then((result) => {
             res.status(200).send(result);
         });

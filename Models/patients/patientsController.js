@@ -2,7 +2,7 @@ PatientModel = require("./patientsModel.js");
 
 
 exports.getById = (req, res) => {
-    PatientModel.getById(req.params.userId)
+    PatientModel.getById(req.params.patientId)
         .then((result) => {
             res.status(200).send(result);
         });
@@ -16,7 +16,7 @@ exports.getAll = (req, res) => {
 };
 
 exports.update = (req, res) => {
-    PatientModel.update(req.body, req.params.userId)
+    PatientModel.update(req.body, req.params.patientId)
         .then((result) => {
             res.status(200).send(result);
         });
@@ -24,7 +24,7 @@ exports.update = (req, res) => {
 
 
 exports.delete = (req, res) => {
-    PatientModel.delete(req.params.userId)
+    PatientModel.delete(req.params.patientId)
         .then((result) => {
             res.status(200).send(result);
         });
