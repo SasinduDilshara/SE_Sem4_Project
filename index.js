@@ -8,6 +8,12 @@ const bodyParser = require('body-parser');
 const UsersRouter = require('./Models/users/routes.config');
 const PatientsRouter = require('./Models/patients/routes.config');
 const NotificationsRouter = require('./Models/notifications/routes.config');
+
+const labreportsRouter = require('./Models/labreports/routes.config');
+
+const labAssistantsRouter = require('./Models/labAssistants/routes.config');
+
+const backupRouter = require('./Models/backupReports/routes.config');
 // const QuestionsRouter = require('./questions/routes.config');
 // const AnswersRouter = require('./answers/routes.config')
 
@@ -29,6 +35,9 @@ app.use(bodyParser.json());
 UsersRouter.routesConfig(app);
 PatientsRouter.routesConfig(app);
 NotificationsRouter.routesConfig(app);
+labreportsRouter.routesConfig(app);
+labAssistantsRouter.routesConfig(app);
+backupRouter.routesConfig(app);
 // QuestionsRouter.routesConfig(app);
 // AnswersRouter.routesConfig(app);
 

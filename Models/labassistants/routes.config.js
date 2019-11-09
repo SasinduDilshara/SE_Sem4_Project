@@ -10,13 +10,13 @@ exports.routesConfig = function (app) {
         labAssistants.getAll
 
     ]);
-    app.get('/labassistant/:id', [
+    app.get('/labassistant/:userId', [
         labAssistants.getById
     ]);
-    app.put('/labassistant/update/:id', [
+    app.put('/labassistant/update/:userId', [
         labAssistants.update
-    ]); 
-    app.delete('/labassistant/delete/:id', [
+    ]);
+    app.delete('/labassistant/delete/:userId', [
         labAssistants.delete
     ]);
 

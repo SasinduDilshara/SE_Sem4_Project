@@ -1,4 +1,4 @@
-LabAssistantModel = require("./labAssistantssModel.js");
+LabAssistantModel = require("./labAssistantsModel.js");
 
 
 exports.getById = (req, res) => {
