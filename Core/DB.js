@@ -55,7 +55,10 @@ async function getAllData(table) {
 
 async function getByColumn(table, param) {
 
+    console.log(table + " ");
+    console.log(param);
     const result = await mysqlConnection.query("Select * from " + table + " where " + param.column + "= ?", [param.body]);
+
     if (result.length < 1) {
         throw new Error('Error occur when try to get data by filtering ' + param.body);
     }

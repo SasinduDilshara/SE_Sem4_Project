@@ -2,7 +2,6 @@ const UsersController = require('./usersController');
 
 
 exports.routesConfig = function (app) {
-    console.log(UsersController.getAll);
     app.post('/register', [
         UsersController.insert
     ]);
@@ -20,6 +19,10 @@ exports.routesConfig = function (app) {
         UsersController.update
     ]); app.delete('/delete:userId', [
         UsersController.delete
+    ]);
+
+    app.post('/login', [
+        UsersController.login
     ]);
 
 };

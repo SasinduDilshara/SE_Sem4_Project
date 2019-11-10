@@ -5,7 +5,6 @@ var ID = "userId";//primary key
 
 exports.getAll = () => {
     return Db.getAll(table).then((results) => {
-        console.log(results)
         return results;
     });
 

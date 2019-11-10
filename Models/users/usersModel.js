@@ -5,7 +5,6 @@ var ID = "userId";//primary key
 
 exports.getAll = () => {
     return Db.getAll(table).then((results) => {
-        console.log(results)
         return results;
     });
 
@@ -14,7 +13,7 @@ exports.getAll = () => {
 
 exports.getById = (id) => {
     return Db.getByColumn(table, { "column": ID, "body": id }).then((results) => {
-        console.log(results);
+
         return results;
     });
 
@@ -23,7 +22,7 @@ exports.getById = (id) => {
 
 exports.getByEmail = (email) => {
     return Db.getByColumn(table, { "column": 'email', "body": email }).then((results) => {
-        console.log(results)
+
         return results;
     });
 
@@ -32,7 +31,7 @@ exports.getByEmail = (email) => {
 
 exports.update = (data, filter) => {
     return Db.update(table, data, { "column": ID, "body": filter }).then((results) => {
-        console.log(results)
+
         return results;
     });
 
@@ -42,7 +41,7 @@ exports.update = (data, filter) => {
 
 exports.delete = (id) => {
     return Db.delete(table, { "column": ID, "body": id }).then((results) => {
-        console.log(results);
+
         return results;
     });
 
@@ -52,7 +51,7 @@ exports.delete = (id) => {
 
 exports.insert = (data) => {
     return Db.insert(table, data).then((results) => {
-        console.log(results)
+
         return results;
     });
 
