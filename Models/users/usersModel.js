@@ -50,6 +50,7 @@ exports.delete = (id) => {
 
 
 exports.insert = (data) => {
+    // console.log(data);
     return Db.insert(table, data).then((results) => {
 
         return results;

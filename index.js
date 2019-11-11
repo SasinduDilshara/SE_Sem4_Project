@@ -3,6 +3,14 @@ const config = require('./Config/config.js');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+var cors = require('cors');
+
+// app.use(cors());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // const AuthorizationRouter = require('./authorization/routes.config');
 const UsersRouter = require('./Models/users/routes.config');

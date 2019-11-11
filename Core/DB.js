@@ -76,6 +76,10 @@ async function deleteAdata(table, param) {
 
 
 async function insertAdata(table, data) {
+
+    console.log("Go to add");
+    console.log(data);
+    console.log("Go to add");
     var data__ = '';
     var data_ = Object.values(data);
     var rows = await getColumns(table);
@@ -83,6 +87,7 @@ async function insertAdata(table, data) {
         data__ += "," + "\'" + data_[i] + "\'";
     }
     data__ = data__.slice(1);
+    console.log("INSERT INTO " + table + " ( " + rows.names + " ) VALUES (" + data__ + " )");
     const result = await mysqlConnection.query("INSERT INTO " + table + " ( " + rows.names + " ) VALUES (" + data__ + " )");
     if (result.length < 1) {
         throw new Error('Error occur when try to insert ' + param.body);
