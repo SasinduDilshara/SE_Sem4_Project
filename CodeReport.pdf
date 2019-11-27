@@ -1,0 +1,20 @@
+Backend - NodeJs + ExpressJs
+        - NodeJs is a welknown backend server platform  and we think that it is more suitable for our project
+        - ExpressJs is a platform to make NodeJs server.
+FrontEnd - React
+         - React is a welknown frontend development platform
+database - mysql(Attach to this folder)
+Other libraries - 
+         - Axios { to post and get data from api end points}
+         - react-router { route pages }
+         - mysql library { connect mysql to nodeJs}
+
+progress - 
+    Backend 100% complete. Made all api endpoints
+    Front end not 100% complete. 
+    Login was worked.
+    Other ui are not properly connected.
+
+
+source Code-:
+https://github.com/SasinduDilshara/SE_Sem4_Project.git

@@ -15,7 +15,7 @@ exports.routesConfig = function (app) {
     app.get('/user/email/:email', [
         UsersController.getByEmail
     ]);
-    app.put('/update:userId', [
+    app.put('/update/:userId', [
         UsersController.update
     ]); app.delete('/delete:userId', [
         UsersController.delete

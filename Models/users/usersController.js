@@ -40,8 +40,8 @@ exports.delete = (req, res) => {
 };
 
 exports.insert = (req, res) => {
-    // console.log(req);
-    UserModel.insert(req.body.userData)
+    console.log("BODY", req.body);
+    UserModel.insert(req.body)
         .then((result) => {
             res.status(200).send(result);
         });
