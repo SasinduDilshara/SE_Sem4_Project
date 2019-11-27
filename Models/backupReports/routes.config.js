@@ -1,12 +1,12 @@
 const backupReports = require('./backupReportsController');
-
+const verify = require("../../extended-privateRoutes/extended-privateRoutes")
 
 exports.routesConfig = function (app) {
     console.log(backupReports.getAll);
     app.post('/backupReport/add', [
         backupReports.insert
     ]);
-    app.get('/backupReports', [
+    app.get('/backupReports', verify, [
         backupReports.getAll
 
     ]);

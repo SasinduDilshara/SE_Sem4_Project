@@ -1,5 +1,7 @@
 UserModel = require("./usersModel.js");
 currentUser = require('../../functions/functions.js');
+const jwt = require("jsonwebtoken")
+
 exports.getById = (req, res) => {
     UserModel.getById(req.params.userId)
         .then((result) => {
@@ -55,6 +57,10 @@ exports.login = function (req, res) {
         .then((results) => {
             if (results.length > 0) {
                 if (results[0].password == password) {
+                    const TOKEN_SECRECT = "aaa"
+                    //create and assaign a token
+                    const token = jwt.sign({ _id: results[0].userId }, TOKEN_SECRECT)
+                    res.header('auth-token', token).send(token)
                     res.send({
                         "code": 200,
                         "success": "login sucessfull"
